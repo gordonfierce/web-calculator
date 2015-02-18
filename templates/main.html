@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>Calculate</title>
+  </head>
+<body>
+<div>Take options, see if we can pass them to the server.</div>
+  {% if result %}
+  Result is: {{result}}
+  {% else %}
+  {% endif %}
+    <form action="." method="POST">
+        {% if result %}
+        <input type="text" name="operand1" value={{ result }}>
+        {% else %}
+        <input type="text" name="operand1" value="Type here">
+        {% endif %}
+        <select name="operator">
+            <option value="-"> -
+            </option>
+            <option value="+"> +
+            </option>
+            <option value="/"> /
+            </option>
+            <option value="*"> *
+            </option>
+        </select>
+        <input type="text" name="operand2">
+        <input type="submit" name="submit" value="Send">
+    </form>
+</body>
+</html>
