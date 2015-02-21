@@ -1,34 +1,46 @@
 from flask import Flask
+from flask import render_template
+from flask import request
 
 
 app = Flask(__name__)
 
-@app.route("/")
-def landing():
-    return "This page is under construction."
+
+def calculate(operator1, operand, operator2):
+    failure_text = "Calculation Failed: Use numbers."
+    if operand == "+":
+        try:
+            result = float(operator1) + float(operator2)
+        except:
+            result = failure_text
+    elif operand == "-":
+        try:
+            result = float(operator1) - float(operator2)
+        except:
+            result = failure_text
+    elif operand == "/":
+        try:
+            result = float(operator1) / float(operator2)
+        except:
+            result = failure_text
+    elif operand == "*":
+        try:
+            result = float(operator1) * float(operator2)
+        except:
+            result = failure_text
+    else:
+        result = "Operation Failed, operator probably unimplemented. Oops."
+    return result
 
 
-@app.route("/calculate/<operand1>/<operator>/<operand2>")
-def calculate(operand1, operator, operand2):
-    calculation = str(operand1) + str(operator) + str(operand2)
-    return "Were you trying to calculate {}?".format(calculation)
-
+@app.route("/", methods=["GET", "POST"])
 @app.route("/calculate/", methods=["GET", "POST"])
 def calc_landing():
-    landing_text = """<div>Take options, see if we can pass them to the server.</div>
-    <form action="." method="POST">
-        <input type="text" name="operand1">
-        <select>
-            <option> -
-            </option>
-            <option> +
-            </option>
-        </select>
-        <input type="text" name="operand2">
-
-        <input type="submit" name="submit" value="Send">
-    </form>"""
-    return landing_text
+    if request.method == 'POST':
+        result = calculate(request.form['operand1'], request.form['operator'],
+                           request.form['operand2'])
+        return render_template('main.html', result=result)
+    return render_template('main.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
